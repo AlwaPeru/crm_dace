@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Config Tree -->
+    <record id="crm_prospect_service_tree_view" model="ir.ui.view">
+        <field name="name">crm.prospect.service.tree.view</field>
+        <field name="model">crm.product.service</field>
+        <field name="arch" type="xml">
+            <tree string="Service">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="crm_prospect_service_form_view" model="ir.ui.view">
+        <field name="name">crm.prospect.service.form.view</field>
+        <field name="model">crm.product.service</field>
+        <field name="arch" type="xml">
+            <form string="Service">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_crm_prospect_service" model="ir.actions.act_window">
+        <field name="name">Service</field>
+        <field name="res_model">crm.product.service</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" eval="False" />
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to register a Service.
+            </p>
+        </field>
+    </record>
+
+    <!-- Action Prospect Service Tree View -->
+    <record id="action_crm_prospect_service_tree_view" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1" />
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="crm_prospect_service_tree_view" />
+        <field name="act_window_id" ref="action_crm_prospect_service" />
+    </record>
+
+    <!-- Action Prospect Service Form View -->
+    <record id="action_crm_prospect_service_form_view" model="ir.actions.act_window.view">
+        <field name="sequence" eval="2" />
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="crm_prospect_service_form_view" />
+        <field name="act_window_id" ref="action_crm_prospect_service" />
+    </record>
+
+    <!-- Menu 'Config' -->
+    <menuitem id="menu_action_crm_prospect_service" action="action_crm_prospect_service" parent="menu_crm_prospect_config" sequence="10" />
+
+
+</odoo>

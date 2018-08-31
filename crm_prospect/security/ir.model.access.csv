@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_crm_lead_user,crm.lead assessor,crm.model_crm_lead,group_crm_prospect_user,1,1,1,0
+access_crm_lead_tag_user,crm.lead.tag assessor,crm.model_crm_lead_tag,group_crm_prospect_user,1,0,0,0
+access_crm_product_service,crm.product.service assessor,model_crm_product_service,group_crm_prospect_user,1,0,0,0
+access_res_dace,res.dace assessor,model_res_dace,group_crm_prospect_user,1,0,0,0
+access_crm_mobility,crm.mobility assessor,model_crm_mobility,group_crm_prospect_user,1,1,1,1

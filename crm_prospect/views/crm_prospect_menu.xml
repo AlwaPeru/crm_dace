@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Top menu item -->
+    <!--
+        This menu item's purpose is to overwrite another one defined in
+        the base module in order to set new groups.
+    -->
+    <menuitem
+        id="crm_prospect_menu_root"
+        name="Prospect"
+        sequence="10"
+        groups="group_crm_prospect_user"/>
+
+    <menuitem
+        id="menu_crm_prospect"
+        name="Prospect"
+        parent="crm_prospect_menu_root"
+        sequence="10"/>
+
+    <menuitem
+        id="menu_crm_prospect_kpi"
+        name="Informs"
+        parent="crm_prospect_menu_root"
+        sequence="20"
+        groups="group_crm_coordinator_all_leads"/>
+
+    <menuitem
+        id="menu_crm_prospect_prospect"
+        name="Prospect"
+        parent="menu_crm_prospect_kpi"
+        action="crm_prospect.action_crm_prospect_kpi"
+        sequence="1"/>
+
+    <menuitem
+        id="menu_crm_prospect_mobility"
+        name="Mobility"
+        parent="menu_crm_prospect_kpi"
+        action="crm_prospect.action_crm_prospect_mobility_kpi"
+        sequence="2"/>
+
+    <menuitem
+        id="menu_crm_prospect_config"
+        name="Configuration"
+        parent="crm_prospect_menu_root"
+        groups="base.group_system"
+        sequence="50"/>
+
+    <menuitem
+        id="menu_crm_prospect_stage_act"
+        name="Stages"
+        sequence="0"
+        action="crm.crm_stage_action"
+        parent="menu_crm_prospect_config"/>
+
+    <menuitem
+        id="crm_product_menu_catalog"
+        name="Products"
+        action="product.product_template_action"
+        parent="menu_crm_prospect_config"
+        sequence="60"
+        groups="base.group_system"/>
+
+</odoo>

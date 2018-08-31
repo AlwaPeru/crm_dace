@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- Config Dace Tree -->
+    <record id="crm_mobility_tree_view" model="ir.ui.view">
+        <field name="name">crm.mobility.tree.view</field>
+        <field name="model">crm.mobility</field>
+        <field name="arch" type="xml">
+            <tree string="Mobility">
+                <field name="name"/>
+                <field name="calendar_event_id"/>
+                <field name="date"/>
+                <field name="district_origin_id"/>
+                <field name="district_destiny_id"/>
+                <field name="transport"/>
+                <field name="amount"/>
+                <field name="user_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="crm_mobility_form_view" model="ir.ui.view">
+        <field name="name">crm.mobility.form.view</field>
+        <field name="model">crm.mobility</field>
+        <field name="arch" type="xml">
+            <form string="Service">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="Code"/>
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group string="Details">
+                        <group>
+                            <field name="calendar_event_id" domain="[('user_id', 'child_of', user_id)]"/>
+                            <field name="district_origin_id" required="1"/>
+                            <field name="transport"/>
+                        </group>
+                        <group>
+                            <field name="date"/>
+                            <field name="district_destiny_id" required="1"/>
+                            <field name="amount" required="1"/>
+                            <field name="user_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <label for="observation" string="Observation"/>
+                    <field name="observation"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_crm_mobility" model="ir.actions.act_window">
+        <field name="name">Mobility</field>
+        <field name="res_model">crm.mobility</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" eval="False" />
+        <!--<field name="context">{"default_customer":0,-->
+            <!--"default_supplier":1,-->
+            <!--"default_company_type": 'company',-->
+            <!--"default_is_company":1}</field>-->
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to register a Mobility.
+            </p>
+        </field>
+    </record>
+
+    <!-- Action Dace Tree View -->
+    <record id="action_crm_mobility_tree_view" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1" />
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="crm_mobility_tree_view" />
+        <field name="act_window_id" ref="action_crm_mobility" />
+    </record>
+
+    <!-- Action Dace Form View -->
+    <record id="action_crm_mobility_form_view" model="ir.actions.act_window.view">
+        <field name="sequence" eval="2" />
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="crm_mobility_form_view" />
+        <field name="act_window_id" ref="action_crm_mobility" />
+    </record>
+
+    <!-- Menu 'Config' -->
+    <menuitem id="menu_action_crm_mobility" action="action_crm_mobility" parent="menu_crm_prospect" sequence="4" />
+
+
+</odoo>

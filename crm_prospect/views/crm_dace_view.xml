@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <!-- Config Dace Tree -->
+    <record id="crm_res_dace_tree_view" model="ir.ui.view">
+        <field name="name">crm.res.dace.tree.view</field>
+        <field name="model">res.dace</field>
+        <field name="arch" type="xml">
+            <tree string="Dace">
+                <field name="name"/>
+                <field name="vat" string="RUC"/>
+                <field name="owner_id"/>
+                <field name="owner_mobile"/>
+                <field name="owner_email"/>
+                <field name="num_ffvv"/>
+                <field name="state"/>
+                <field name="user_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="crm_res_dace_form_view" model="ir.ui.view">
+        <field name="name">crm.res.dace.form.view</field>
+        <field name="model">res.dace</field>
+        <field name="arch" type="xml">
+            <form string="Service">
+                <sheet>
+                    <field name="image" widget='image' class="oe_avatar" options='{"preview_image": "image_medium", "size": [90, 90]}'/>
+                    <div class="oe_title">
+                        <field name="is_company" invisible="1"/>
+                        <field name="commercial_partner_id" invisible="1"/>
+                        <field name="company_type" widget="radio"
+                            class="oe_edit_only"
+                            options="{'horizontal': true}"
+                           invisible="1"/>
+                        <label for="name" string="Dace" class="oe_edit_only"/>
+                        <h1>
+                            <field name="name" default_focus="1" placeholder="Name" attrs="{'required' : [('type', '=', 'contact')]}"/>
+                        </h1>
+                        <div class="o_row">
+                            <field name="parent_id"
+                                placeholder="Company"
+                                domain="[('is_company', '=', True)]" context="{'default_is_company': True, 'default_supplier': supplier, 'default_customer': customer}"
+                                attrs="{'invisible': ['|', '&amp;', ('is_company','=', True),('parent_id', '=', False),('company_name', '!=', False),('company_name', '!=', '')]}"/>
+                                <field name="company_name" attrs="{'invisible': ['|', '|', ('company_name', '=', False), ('company_name', '=', ''), ('is_company', '=', True)]}"/>
+                                <button name="create_company" type="object" string="Create company" class="btn btn-sm oe_edit_only fa fa-external-link btn btn-link " attrs="{'invisible': ['|', '|', ('is_company','=', True), ('company_name', '=', ''), ('company_name', '=', False)]}"/>
+                        </div>
+                    </div>
+                    <group string="Claro Details">
+                        <group>
+                            <field name="coordinator_claro_id" domain="[('entity', '=', 'claro')]" required="1"/>
+                            <field name="id" invisible="1"/>
+                        </group>
+                    </group>
+                    <group string="Contact">
+                        <group>
+                            <field name="owner_id" domain="[('entity', '=', 'dace')]"/>
+                        </group>
+                        <group>
+                            <field name="owner_mobile"/>
+                            <field name="owner_email"/>
+                        </group>
+                    </group>
+                    <group string="Details">
+                        <group>
+                            <field name="vat" string="RUC"/>
+                            <field name="num_ffvv"/>
+                        </group>
+                        <group>
+                            <field name="state"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Hierarchy" >
+                            <div attrs="{'invisible': [('id', '!=', False)]}">
+                                <p>Debe Guardar el Dace antes de agregar una herarquía.</p>
+                            </div>
+                            <field name="supervisor_ids" nolabel="1" widget="many2many"
+                                   options="{'not_delete': True}" domain="[('entity', '=', 'dace'), ('dace_id', '=', False)]"
+                                   attrs="{'readonly': [('id', '=', False)]}">
+                                <tree editable="bottom">
+                                    <field name="name" readonly="True"/>
+                                    <field name="parent_user_id" domain="[('entity', '=', 'dace')]"/>
+                                    <field name="complete_name"/>
+                                </tree>
+                                <form>
+                                    <sheet>
+                                        <group>
+                                            <group>
+                                                <field name="parent_user_id"/>
+                                            </group>
+                                            <group></group>
+                                            <separator string="Childs"/>
+                                            <field name="child_user_ids" widget="many2many" options="{'not_delete': True}">
+                                                <kanban quick_create="false" create="true" delete="true">
+                                                    <field name="id"/>
+                                                    <field name="name"/>
+                                                    <templates>
+                                                        <t t-name="kanban-box">
+                                                            <div class="oe_kanban_global_click" style="max-width: 200px">
+                                                                <div class="o_kanban_record_top">
+                                                                    <img t-att-src="kanban_image('res.users', 'image_small', record.id.raw_value)" height="40" width="40" class="oe_avatar oe_kanban_avatar_smallbox mb0"/>
+                                                                    <div class="o_kanban_record_headings ml8">
+                                                                        <strong class="o_kanban_record_title"><field name="name"/></strong>
+                                                                    </div>
+                                                                    <a t-if="! read_only_mode" type="delete" class="text-danger">
+                                                                        <i class="fa fa-times"></i>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </t>
+                                                    </templates>
+                                                </kanban>
+                                            </field>
+                                        </group>
+                                    </sheet>
+                                </form>
+                            </field>
+                        </page>
+                        <page string="Note">
+                            <field name="note"/>
+                            <group>
+                                <group>
+                                    <field name="type" attrs="{'invisible': [('parent_id','=', False)]}" groups="base.group_no_one"/>
+                                    <field name="supplier" invisible="1"/>
+                                    <field name="customer" invisible="1"/>
+                                </group>
+                                <group>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_crm_res_dace" model="ir.actions.act_window">
+        <field name="name">Dace</field>
+        <field name="res_model">res.dace</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" eval="False" />
+        <field name="context">{"default_customer":0,
+            "default_supplier":1,
+            "default_company_type": 'company',
+            "default_is_company":1}</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to register a Dace.
+            </p>
+        </field>
+    </record>
+
+    <!-- Action Dace Tree View -->
+    <record id="action_crm_res_dace_tree_view" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1" />
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="crm_res_dace_tree_view" />
+        <field name="act_window_id" ref="action_crm_res_dace" />
+    </record>
+
+    <!-- Action Dace Form View -->
+    <record id="action_crm_res_dace_form_view" model="ir.actions.act_window.view">
+        <field name="sequence" eval="2" />
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="crm_res_dace_form_view" />
+        <field name="act_window_id" ref="action_crm_res_dace" />
+    </record>
+
+    <!-- Menu 'Config' -->
+    <menuitem id="menu_action_crm_res_dace" action="action_crm_res_dace" parent="menu_crm_prospect_config" sequence="20" />
+
+
+    <record id="crm_res_dace_coordinator_form_view" model="ir.ui.view">
+        <field name="name">crm.res.dace.coordinator.form.view</field>
+        <field name="model">res.users</field>
+        <field name="arch" type="xml">
+            <form string="Coordinator">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="dace_id"/>
+                        </group>
+                        <group>
+                            <!--<field name="user_id"/>-->
+                        </group>
+                        <separator string="Assessors"/>
+                        <field name="child_user_ids" widget="many2many" options="{'not_delete': True}">
+                            <kanban quick_create="false" create="true" delete="true">
+                                <field name="id"/>
+                                <field name="name"/>
+                                <templates>
+                                    <t t-name="kanban-box">
+                                        <div class="oe_kanban_global_click" style="max-width: 200px">
+                                            <div class="o_kanban_record_top">
+                                                <img t-att-src="kanban_image('res.users', 'image_small', record.id.raw_value)" height="40" width="40" class="oe_avatar oe_kanban_avatar_smallbox mb0"/>
+                                                <div class="o_kanban_record_headings ml8">
+                                                    <strong class="o_kanban_record_title"><field name="name"/></strong>
+                                                </div>
+                                                <a t-if="! read_only_mode" type="delete" class="text-danger">
+                                                    <i class="fa fa-times"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </t>
+                                </templates>
+                            </kanban>
+                        </field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>
